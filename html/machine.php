@@ -1,11 +1,13 @@
 <?php
-	require '../../aws_php_sdk/aws-autoloader.php';
+	require 'lib/aws_php_sdk/aws-autoloader.php';
+
+
 	$client = new Aws\MachineLearning\MachineLearningClient([
 		'region'  => 'us-east-1',
 		'version' => 'latest',
 		'credentials' => [
-			'key'    => 'AKIAJGEYPOZAM36MTHHA',
-			'secret' => '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',
+			'key'    => file_get_contents('/home/ubuntu/git/aws_web_id'),
+			'secret' => file_get_contents('/home/ubuntu/git/aws_web_password'),
 		],
 	]);
 	
@@ -29,7 +31,7 @@
 	
 	//echo $result->$Prediction->$predictedValue;
 	$predict = $result->get('Prediction')['predictedLabel'];
-	
+	//$predict = 5;
 	echo json_decode($predict);
 	
 	

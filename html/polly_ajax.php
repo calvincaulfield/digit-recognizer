@@ -1,11 +1,11 @@
 <?php
-	require '../../aws_php_sdk/aws-autoloader.php';
+	require 'lib/aws_php_sdk/aws-autoloader.php';
 	$client = new Aws\Polly\PollyClient([
 			'region'  => 'us-east-1',
 			'version' => 'latest',
 			'credentials' => [
-				'key'    => 'AKIAJGEYPOZAM36MTHHA',
-				'secret' => '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',
+				'key'    => file_get_contents('/home/ubuntu/git/aws_web_id'),
+				'secret' => file_get_contents('/home/ubuntu/git/aws_web_password'),
 			],
 		]);
 	$result = $client->synthesizeSpeech([
@@ -19,6 +19,9 @@
 	$filename = $current_time . ".mp3";
 	//$filename = "polly.mp3";
 
-	file_put_contents($filename, $audio);
+	//file_put_contents('audio/temp.mp3', ''); 
+	file_put_contents('audio/' . $filename, $audio); 
+	//echo json_encode($filename);
 	echo json_encode($filename);
+
 	//var_dump($audio);

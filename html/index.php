@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Cache-Control" content="no-store" />
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="/css/mystyle.css" />
 <script type="text/javascript" src="/lib/jquery/jquery.js"></script>
@@ -242,16 +243,20 @@
 	   } else {
 		  $.ajax({
 			 type: "GET",
-			 url: "polly_ajax.php",
-			 data: { input: input_text },
+			 url: "polly_ajax.php", 
+			 data: { input: input_text, dummy: Date().toString() },
 			 dataType: 'json',
 			 cache: false,
 			 async: false,
 			 success: function(result){
 				 //alert(result);
-				var audioElement = document.createElement('audio');
-						audioElement.setAttribute('src', result);
-						audioElement.play();
+				 var audio = new Audio('audio/' + result);
+					audio.play();
+
+				//var audioElement = document.createElement('audio');
+						//audioElement.setAttribute('src', '/audio/temp.mp3');
+						//audioElement.load();
+						//audioElement.play();
 				// Plays the mp3 at the returned URL
 				//$("#audio_player").src = "polly.mp3";
 				//$("#audio_player").play();
@@ -291,6 +296,10 @@
 	</div>
 </div>
 
+<?php
+echo file_get_contents('/home/ubuntu/git/aws_web_id');
+
+?>
 
 <script>
 	document.getElementById("text").addEventListener("keyup", function(event) {
@@ -301,6 +310,10 @@
 	}
 });
 </script>
+
+<audio id="player" controls>
+	<source src="audio/temp.mp3" type="audio/mpeg">
+</audio>
 
 </body>
 </html>
