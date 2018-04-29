@@ -26,15 +26,18 @@
 		canvas.onmousemove = mouseMove;
 		
 		canvas.touchstart = function(event) {
+			event.preventDefault();
 			var touch = event.touches[0];
 			mouseDown(touch.clientX, touch.clientY);
 		}
 		
 		canvas.touchend = function(event) {
+			event.preventDefault();
 			mouseUp(event);
 		};
 		
 		canvas.touchmove = function(event) {
+			event.preventDefault();
 			var touch = event.touches[0];
 			mouseMove(touch.clientX, touch.clientY);
 		};
@@ -56,6 +59,7 @@
 		info2 = document.getElementById('info-2');
 		info3 = document.getElementById('info-3');
 		
+		/*
 		// Prevent scrolling when touching the canvas
 		document.body.addEventListener("touchstart", function (e) {
 		  if (e.target == canvas) {
@@ -71,7 +75,7 @@
 		  if (e.target == canvas) {
 			e.preventDefault();
 		  }
-		}, false);
+		}, false);*/
 		
 	});
 	
@@ -297,7 +301,6 @@
 </div>
 
 <?php
-echo file_get_contents('/home/ubuntu/git/aws_web_id');
 
 ?>
 
