@@ -6,8 +6,8 @@
 		'region'  => 'us-east-1',
 		'version' => 'latest',
 		'credentials' => [
-			'key'    => file_get_contents('/home/ubuntu/git/aws_web_id'),
-			'secret' => file_get_contents('/home/ubuntu/git/aws_web_password'),
+			'key'    => file_get_contents('../../aws_web_id'),
+			'secret' => file_get_contents('../../aws_web_password'),
 		],
 	]);
 	
