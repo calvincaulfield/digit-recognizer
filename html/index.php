@@ -127,11 +127,10 @@
 		//alert(JSON.stringify(result));
 		let output = analyze(result);
 		display(output);
-		
-		doAwsPredict(result);
+		doAwsPredict(result, output);
 	}
 	
-	function doAwsPredict(bitmap) {
+	function doAwsPredict(bitmap, my_output) {
 	  $.ajax({
 		 type: "GET",
 		 url: "machine.php",
@@ -142,6 +141,7 @@
 		 success: function(result){
 			 //alert(result);
 			 showAwsResult(result);
+			 annouce_result(result, my_output);
 		 },
 		 error: function(err) {
 			 alert(JSON.stringify(err));
@@ -193,21 +193,25 @@
 	
 	function analyze(bitmapData) {
 		let output = runNetwork(neuralNetwork, bitmapData, Math.tanh);
-		return output;
-	}
-	
-	// Argument is array of ten floats, each of which denotes the probability
-	//  of the handwriting being that digit. 
+		return process_data(output);
+	}	
+
 	function display(data) {
-		data = data.map((val, index) => { return [index, Math.round(val * 100)] });
-		data.sort((a, b) => { return b[1] - a[1]; });
 		//alert('AI result: ' + JSON.stringify(output.slice(0, 3)));	
 		
 		$('#lib-calvin-01').text(data[0][0] + ' (' + data[0][1] + '%)');
 		$('#lib-calvin-02').text(data[1][0] + ' (' + data[1][1] + '%)');
 		$('#lib-calvin-03').text(data[2][0] + ' (' + data[2][1] + '%)');
 	}
-	
+
+	// Argument is array of ten floats, each of which denotes the probability
+	//  of the handwriting being that digit. 	
+	function process_data(data) {
+		data = data.map((val, index) => { return [index, Math.round(val * 100)] });
+		data.sort((a, b) => { return b[1] - a[1]; });
+		return data;
+	}
+
 	function resetDisplay() {
 		$('#amazon-result').text('?');
 
@@ -249,17 +253,26 @@
 			async: false,
 			success: function(response) {
 				city = JSON.stringify(response['city'], null, 4);
-				var text = "初めまして。わたくし、アマゾンンの音声変換システムの水木ともうします。今度は南くんのAPI呼び出しに応じてまいりました。" + 
-						"今日は" + date.getFullYear() + "年" + date.getMonth() + "月" + date.getDate() + "日" + "でございます。" +
+				
+				var text = "初めまして。わたくし、アマゾンの音声変換システムの水木ともうします。今度は南くんのAPI呼び出しに応じてまいりました。" + 
+						"今日は" + date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日" + "でございます。" +
 						"現在貴方は" + city + "にいらっしゃいますね。" +
 						"では、下のボックスにマウスで０から9までの数字を一つ書いてみてください。書き終わったらその下のボタンを押してみましょう。";
-		pollySubmit(text);
+				pollySubmit(text);
 			},
 			error: function(err) {
 				alert(JSON.stringify(err));
 			}
 	   });
    }
+
+   function annouce_result(amazon_result, my_result) {
+	   var is_same_answer = amazon_result == my_result[0][0];
+	   var text = "アマゾンのAIは"　+ amazon_result + "だと判断しました。南くんのAI" + (is_same_answer ? "も同じく" : "は") + my_result[0][0] + "だと判断しました。" +
+	   		"キャンバスの外をクリックしてもう一度試してみましょう。";
+	   pollySubmit(text);
+   }
+
 </script>
 </head>
 
