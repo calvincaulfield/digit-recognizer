@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta name="robots" content="noindex">
+
 <link rel="stylesheet" href="/css/mystyle.css" />
 <script type="text/javascript" src="/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="handwriting_network.js"></script>
@@ -25,6 +26,8 @@
 		canvas.onmouseup = mouseUp;
 		canvas.onmousemove = mouseMove;
 		
+		// Below methods are for mobile, but doesn't work
+		/*
 		canvas.touchstart = function(event) {
 			event.preventDefault();
 			var touch = event.touches[0];
@@ -40,7 +43,7 @@
 			event.preventDefault();
 			var touch = event.touches[0];
 			mouseMove(touch.clientX, touch.clientY);
-		};
+		};*/
 		
 		let container = document.getElementById('out-of-canvas');
 		container.onmousedown = reset;
@@ -53,30 +56,7 @@
 		context = canvas.getContext('2d');
 		context.lineWidth = 20;
 		context.lineJoin = 'round';
-		context.lineCap = 'round';
-		
-		info1 = document.getElementById('info-1');
-		info2 = document.getElementById('info-2');
-		info3 = document.getElementById('info-3');
-		
-		/*
-		// Prevent scrolling when touching the canvas
-		document.body.addEventListener("touchstart", function (e) {
-		  if (e.target == canvas) {
-			e.preventDefault();
-		  }
-		}, false);
-		document.body.addEventListener("touchend", function (e) {
-		  if (e.target == canvas) {
-			e.preventDefault();
-		  }
-		}, false);
-		document.body.addEventListener("touchmove", function (e) {
-		  if (e.target == canvas) {
-			e.preventDefault();
-		  }
-		}, false);*/
-		
+		context.lineCap = 'round';		
 	});
 	
 	function reset() {
@@ -105,7 +85,6 @@
 	
 	function mouseUp(event) {
 		isDrawingNow = false;
-		//getBitmap();		
 	}
 	
 	function mouseMove(event) {
@@ -128,7 +107,6 @@
 	}
 	
 	function drawLine(point1, point2) {
-		//alert(point1 + ' aa ' + point2);
 		context.beginPath();
 		context.moveTo(point1[0], point1[1]);
 		context.lineTo(point2[0], point2[1]);
@@ -172,7 +150,7 @@
 	}
 	
 	function showAwsResult(result) {
-		$('#aws_result').text('Amazon machine learning predicts: ' + result);
+		$('#amazon-result').text(result);
 	}
 	
 	// Convert Canvas bitmap to greyscale, taking Alpha values.
@@ -225,23 +203,20 @@
 		data.sort((a, b) => { return b[1] - a[1]; });
 		//alert('AI result: ' + JSON.stringify(output.slice(0, 3)));	
 		
-		info1.innerHTML = data[0][0] + ' (' + data[0][1] + '%)';
-		info2.innerHTML = data[1][0] + ' (' + data[1][1] + '%)';
-		info3.innerHTML = data[2][0] + ' (' + data[2][1] + '%)';
-		//alert('아마 ' + data[0][0] + ' 인거 같아요. 아니면, ' + data[1][0] + ' 이거나 ' +
-		//	data[2][0] + ' 인 것 같네요');
+		$('#lib-calvin-01').text(data[0][0] + ' (' + data[0][1] + '%)');
+		$('#lib-calvin-02').text(data[1][0] + ' (' + data[1][1] + '%)');
+		$('#lib-calvin-03').text(data[2][0] + ' (' + data[2][1] + '%)');
 	}
 	
 	function resetDisplay() {
-		info1.innerHTML = '';
-		info2.innerHTML = '';
-		info3.innerHTML = '';
+		$('#amazon-result').text('?');
+
+		$('#lib-calvin-01').text('?');
+		$('#lib-calvin-02').text('?');
+		$('#lib-calvin-03').text('?');
 	}
 	
-	function pollySubmit() {	
-		
-	   var input_text = $("#text").val();
-	   //alert(input_text);
+	function pollySubmit(input_text) {		
 	   if (input_text == '') {
 		  return;
 	   } else {
@@ -253,18 +228,8 @@
 			 cache: false,
 			 async: false,
 			 success: function(result){
-				 //alert(result);
-				 var audio = new Audio('audio/' + result);
-					audio.play();
-
-				//var audioElement = document.createElement('audio');
-						//audioElement.setAttribute('src', '/audio/temp.mp3');
-						//audioElement.load();
-						//audioElement.play();
-				// Plays the mp3 at the returned URL
-				//$("#audio_player").src = "polly.mp3";
-				//$("#audio_player").play();
-				//audioElement.setAttribute('src', result);
+				var audio = new Audio('audio/' + result);
+				audio.play();
 			 },
 			 error: function(err) {
 				 alert(JSON.stringify(err));
@@ -272,51 +237,79 @@
 		  });
 	   }
    }
+
+   function introduce() {
+	   var date = new Date();
+	   var city = 0;
+	   $.ajax({
+			type: "GET",
+			url: "https://api.ipdata.co", 
+			dataType: 'jsonp',
+			cache: false,
+			async: false,
+			success: function(response) {
+				city = JSON.stringify(response['city'], null, 4);
+				var text = "初めまして。わたくし、アマゾンンの音声変換システムの水木ともうします。今度は南くんのAPI呼び出しに応じてまいりました。" + 
+						"今日は" + date.getFullYear() + "年" + date.getMonth() + "月" + date.getDate() + "日" + "でございます。" +
+						"現在貴方は" + city + "にいらっしゃいますね。" +
+						"では、下のボックスにマウスで０から9までの数字を一つ書いてみてください。書き終わったらその下のボタンを押してみましょう。";
+		pollySubmit(text);
+			},
+			error: function(err) {
+				alert(JSON.stringify(err));
+			}
+	   });
+   }
 </script>
 </head>
 
 <body>
+
+<h1>人工知能体験サイトにようこそ！</h1>
+<div>
+<button style="margin:0 auto" onclick="introduce();">1.説明を聞く</button>
+</div>
+
 <div style="overflow: auto;" id="out-of-canvas">
 	<div id="input-canvas-container">
 		<canvas id="input-canvas" width="300px" height="300px"></canvas>
 	</div>
 </div>
 
-<button onclick="getBitmap();">AIに数字を判別してもらう</button>
+<div>
+<button style="margin:0 auto" onclick="getBitmap();">2.AIに数字を判別してもらう</button>
+</div>
 
-<p id="aws_result"></p>
-
-<div style="width:300px; margin: 0 auto; text-align: center;">
-<p id="info-1" style="font-size: 50px; font-weight:bold;"></p>
-<p id="info-2" style="font-size: 30px;"></p>
-<p id="info-3" style="font-size: 30px;"></p>
+<div style="margin-top:50px">
+	<table style="width:300px; margin: 0 auto; text-align: center;">
+		<tr><th>Amazon</th><th>lib_calvin</th></tr>
+		<tr><td id="amazon-result">?</td><td id="lib-calvin-01">?</td></tr>
+		<tr><td></td><td id="lib-calvin-02">?</td></tr>
+		<tr><td></td><td id="lib-calvin-03">?</td></tr>
+	</table>
 </div>
 
 
-<div id="mainform">
+<div>
 	<h2>読んでほしい言葉を入力してください</h2>
 	<div id="polly_input_form" >
 		<input id="text" type="text">
 	</div>
 </div>
 
-<?php
-
-?>
+<pre id="response"></pre>
 
 <script>
 	document.getElementById("text").addEventListener("keyup", function(event) {
 	event.preventDefault();
 	// Number 13 is the "Enter" key on the keyboard
 	if (event.keyCode === 13) {
-		pollySubmit();
+		pollySubmit($("#text").val());
 	}
 });
-</script>
 
-<audio id="player" controls>
-	<source src="audio/temp.mp3" type="audio/mpeg">
-</audio>
+
+</script>
 
 </body>
 </html>

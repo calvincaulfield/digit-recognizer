@@ -1,9 +1,18 @@
 body {	
 	overflow-y: scroll;
 	font-family: Malgun Gothic;
-	font-size: 100%;	
-	width: 1200px;
+	font-size: 20px;;	
+	width: 800px;
 	margin: 0 auto;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+td, th {
+	padding: 5px;
+	border: solid 1px;
 }
 
 #input-canvas-container {
@@ -34,11 +43,7 @@ body {
 }
 
 button {	
-	display: inline-block;
-	vertical-align:top;
-	margin-right: 10px;
-	width: 400px; 
-	height:80px; 
-	margin: 0 2px;
-	font-size: 20px;
+	display: block;
+	padding: 25px;
+	//font-size: 20px;
 }

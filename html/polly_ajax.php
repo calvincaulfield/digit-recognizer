@@ -11,7 +11,7 @@
 	$result = $client->synthesizeSpeech([
 		'OutputFormat' => 'mp3', // REQUIRED
 		'Text' => $_GET['input'], // REQUIRED
-		'VoiceId' => 'Emma', // REQUIRED
+		'VoiceId' => 'Mizuki', // REQUIRED
 	]);
 	$audio = $result->get('AudioStream')->getContents();
 	
