@@ -123,34 +123,37 @@
 		let newHeight = 28;
 		let bitmap = context.getImageData(0, 0, width, height);
 		let greyscale = convertToGreyscale(bitmap.data);		
-		let result = convertBitmap(greyscale, height, width, newHeight, newWidth);
-		//alert(JSON.stringify(result));
-		let output = analyze(result);
+		let resultBitmap = convertBitmap(greyscale, height, width, newHeight, newWidth);
+		let output = analyze(resultBitmap);
 		display(output);
-		doAwsPredict(result, output);
+		doAwsPredict(resultBitmap, output);
 	}
 	
 	function doAwsPredict(bitmap, my_output) {
-	  $.ajax({
-		 type: "GET",
-		 url: "machine.php",
-		 data: { input: JSON.stringify(bitmap) },
-		 dataType: 'json',
-		 cache: false,
-		 async: false,
-		 success: function(result){
-			 //alert(result);
-			 showAwsResult(result);
-			 annouce_result(result, my_output);
-		 },
-		 error: function(err) {
-			 alert(JSON.stringify(err));
-		 }
-	  });		
+		var start_time = Date.now();
+
+		$.ajax({
+			type: "GET",
+			url: "machine.php",
+			data: { input: JSON.stringify(bitmap) },
+			dataType: 'json',
+			cache: false,
+			async: false,
+			success: function(predicted_number){
+				//alert(result);
+				var aws_result = [predicted_number, (Date.now() - start_time) / 1000];
+				showAwsResult(aws_result);
+				annouce_result(aws_result, my_output);
+			},
+			error: function(err) {
+				alert(JSON.stringify(err));
+			}
+		});		
 	}
 	
-	function showAwsResult(result) {
-		$('#amazon-result').text(result);
+	function showAwsResult(aws_result) {
+		$('#amazon-result').text(aws_result[0]);
+		$('#amazon-time').text(aws_result[1]);
 	}
 	
 	// Convert Canvas bitmap to greyscale, taking Alpha values.
@@ -192,16 +195,22 @@
 	}
 	
 	function analyze(bitmapData) {
+		var start_time = Date.now();
 		let output = runNetwork(neuralNetwork, bitmapData, Math.tanh);
-		return process_data(output);
+		var duration = Date.now() - start_time;
+		//alert(start_time);
+		return [process_data(output), duration / 1000];
 	}	
 
-	function display(data) {
+	function display(data_and_duration) {
 		//alert('AI result: ' + JSON.stringify(output.slice(0, 3)));	
 		
+		var data = data_and_duration[0];		
 		$('#lib-calvin-01').text(data[0][0] + ' (' + data[0][1] + '%)');
 		$('#lib-calvin-02').text(data[1][0] + ' (' + data[1][1] + '%)');
 		$('#lib-calvin-03').text(data[2][0] + ' (' + data[2][1] + '%)');
+		
+		$('#lib-calvin-time').text(data_and_duration[1]);
 	}
 
 	// Argument is array of ten floats, each of which denotes the probability
@@ -267,9 +276,14 @@
    }
 
    function annouce_result(amazon_result, my_result) {
-	   var is_same_answer = amazon_result == my_result[0][0];
-	   var text = "アマゾンのAIは"　+ amazon_result + "だと判断しました。南くんのAI" + (is_same_answer ? "も同じく" : "は") + my_result[0][0] + "だと判断しました。" +
-	   		"キャンバスの外をクリックしてもう一度試してみましょう。";
+	   var amazon_number = amazon_result[0];
+	   var amazon_time = amazon_result[1];
+	   var my_numbers = my_result[0];
+	   var my_time = my_result[1];
+	   var is_same_answer = amazon_number == my_numbers[0][0];
+	   var text = "アマゾンのAIは"　+ amazon_time + "秒をかけて" + amazon_number + "だと判断しました。" + 
+					"南くんのAIは" + my_time + "秒をかけて" + (is_same_answer ? "同じく" : "") + my_numbers[0][0] + "だと判断しました。" +
+					"キャンバスの外をクリックしてもう一度試してみましょう。";
 	   pollySubmit(text);
    }
 
@@ -295,22 +309,23 @@
 
 <div style="margin-top:50px">
 	<table style="width:300px; margin: 0 auto; text-align: center;">
-		<tr><th>Amazon</th><th>lib_calvin</th></tr>
-		<tr><td id="amazon-result">?</td><td id="lib-calvin-01">?</td></tr>
-		<tr><td></td><td id="lib-calvin-02">?</td></tr>
-		<tr><td></td><td id="lib-calvin-03">?</td></tr>
+		<tr><th></th><th>Amazon</th><th>lib_calvin</th></tr>
+		<tr><th>時間</th><td id="amazon-time">?</td><td id="lib-calvin-time">?</td></tr>
+		<tr><th>1順位</th><td id="amazon-result">?</td><td id="lib-calvin-01">?</td></tr>
+		<tr><th>2順位</th><td></td><td id="lib-calvin-02">?</td></tr>
+		<tr><th>3順位</th><td></td><td id="lib-calvin-03">?</td></tr>
 	</table>
 </div>
 
+<pre id="response"></pre>
 
+<!--
 <div>
 	<h2>読んでほしい言葉を入力してください</h2>
 	<div id="polly_input_form" >
 		<input id="text" type="text">
 	</div>
 </div>
-
-<pre id="response"></pre>
 
 <script>
 	document.getElementById("text").addEventListener("keyup", function(event) {
@@ -320,9 +335,9 @@
 		pollySubmit($("#text").val());
 	}
 });
-
-
 </script>
+-->
+
 
 </body>
 </html>
