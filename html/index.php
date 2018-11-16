@@ -254,25 +254,10 @@
    function introduce() {
 	   var date = new Date();
 	   var city = 0;
-	   $.ajax({
-			type: "GET",
-			url: "https://api.ipdata.co", 
-			dataType: 'jsonp',
-			cache: false,
-			async: false,
-			success: function(response) {
-				city = JSON.stringify(response['city'], null, 4);
-				
-				var text = "初めまして。わたくし、アマゾンの音声変換システムの水木ともうします。今度は南くんのAPI呼び出しに応じてまいりました。" + 
-						"今日は" + date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日" + "でございます。" +
-						"現在貴方は" + city + "にいらっしゃいますね。" +
+	   var text = "初めまして。わたくしはアマゾンの音声変換システムの水木ともうします。今度は南くんのAPI呼び出しに応じてまいりました。" + 
+						"今日は" + date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日" + "でございます。" +						
 						"では、下のボックスにマウスで０から9までの数字を一つ書いてみてください。書き終わったらその下のボタンを押してみましょう。";
-				pollySubmit(text);
-			},
-			error: function(err) {
-				alert(JSON.stringify(err));
-			}
-	   });
+		pollySubmit(text);
    }
 
    function annouce_result(amazon_result, my_result) {
@@ -293,6 +278,7 @@
 <body>
 
 <h1>人工知能体験サイトにようこそ！</h1>
+<p>音声で案内するのでスピーカーやイヤフォンを用意してください</p>
 <div>
 <button style="margin:0 auto" onclick="introduce();">1.説明を聞く</button>
 </div>
