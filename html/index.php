@@ -138,12 +138,12 @@
 			data: { input: JSON.stringify(bitmap) },
 			dataType: 'json',
 			cache: false,
-			async: false,
+			async: true,
 			success: function(predicted_number){
 				//alert(result);
 				var aws_result = [predicted_number, (Date.now() - start_time) / 1000];
 				showAwsResult(aws_result);
-				annouce_result(aws_result, my_output);
+				//annouce_result(aws_result, my_output);
 			},
 			error: function(err) {
 				alert(JSON.stringify(err));
