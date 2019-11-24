@@ -1,4 +1,7 @@
 # digit-recognizer
+### Website
+[digit recognizer](ai.minami.link)
+
 ### Webapp to recognize a handwritten digit 
 
 #### Comparing two methods
