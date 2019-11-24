@@ -1,2 +1,11 @@
 # digit-recognizer
-Webapp to recognize handwritten digit using two independent methods: 1. hand crafted neural network implementation, 2. Amazon Machine Learning service.
+### Webapp to recognize a handwritten digit 
+
+#### Comparing two methods
+- handcrafted neural network implementation
+- Amazon Machine Learning service.
+
+
+#### Data
+- [MNIST DATABASE](http://yann.lecun.com/exdb/mnist/)
+
