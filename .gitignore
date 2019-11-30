@@ -50,3 +50,7 @@ CTestTestfile.cmake
 _deps
 
 _build
+
+
+######### web ##########
+.env*
