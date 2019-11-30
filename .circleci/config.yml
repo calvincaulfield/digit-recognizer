@@ -1,0 +1,51 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@6.5.0
+
+jobs:
+  deploy:
+    docker:
+      - image: circleci/ruby:2.4.2-jessie-node
+    steps:
+      - checkout
+      - run:
+          name: Delete service
+          command: |
+            ./ecs-cli compose --cluster calvin --project-name sns --file docker-compose-prod.yml service down
+      - run:
+          name: Wait for service down
+          command: |
+            sleep 60
+      - run:
+          name: Start service with new taks version
+          command: |
+            ./ecs-cli compose --cluster calvin --project-name sns --file docker-compose-prod.yml service up
+
+workflows:
+  api:
+    jobs:
+      - aws-ecr-1/build-and-push-image:
+          repo: sns-gateway
+          tag: latest
+          path: ./gateway
+          dockerfile: ./gateway/Dockerfile
+      - aws-ecr-2/build-and-push-image:
+          repo: sns-api
+          tag: latest
+          path: ./api
+          dockerfile: ./api/Dockerfile
+      - aws-ecr-3/build-and-push-image:
+          repo: sns-nextjs
+          tag: latest
+          path: ./nextjs
+          dockerfile: ./nextjs/Dockerfile
+      - deploy:
+          requires:
+            - aws-ecr-1/build-and-push-image
+            - aws-ecr-2/build-and-push-image
+            - aws-ecr-3/build-and-push-image
+
+
+
+
