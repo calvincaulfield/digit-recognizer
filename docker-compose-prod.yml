@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  apache:
+    image: 461691961615.dkr.ecr.ap-northeast-1.amazonaws.com/ai:latest
+    ports:
+      - 80:2010
+    env_file:
+      - ./.env-prod
+    restart: always
+
