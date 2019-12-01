@@ -5,6 +5,9 @@ services:
     image: 461691961615.dkr.ecr.ap-northeast-1.amazonaws.com/ai:latest
     ports:
       - 80:2010
-    restart: always
+    environment:
+      - AI_PORT=2010
+      - AWS_ID=AKIAWW7X4IEHTD2PZO63
+
 
 
