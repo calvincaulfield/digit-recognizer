@@ -19,7 +19,7 @@ jobs:
             sleep 60
       - run:
           name: Start service with new taks version
-          command: >
+          command: |
             ./aws/ecs-cli compose --cluster calvin --project-name ai --file docker-compose-prod.yml --ecs-params ./aws/ecs-params.yml service up
 
 workflows:
