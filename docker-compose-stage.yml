@@ -2,13 +2,11 @@ version: '3'
 
 services:
   apache:
-    build:
-      context: ..
-      dockerfile: ../docker/Dockerfile
+    build: .
     image: calvincaulfield/ai
     ports:
       - 2010:2010
     env_file:
-      - ../env/.env-stage
+      - env/.env-stage
     restart: always
 
