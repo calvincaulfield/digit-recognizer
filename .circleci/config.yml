@@ -11,11 +11,8 @@ jobs:
       - checkout
       - run:
           name: Delete service
-          command: >
-            ./ecs-cli compose 
-            --cluster calvin --project-name ai --file docker/docker-compose-prod.yml 
-            --ecs-params ./aws/ecs-params.yml 
-            service down
+          command:
+            ./ecs-cli compose --cluster calvin --project-name ai --file docker/docker-compose-prod.yml --ecs-params ./aws/ecs-params.yml service down
       - run:
           name: Wait for service down
           command: |
@@ -23,10 +20,7 @@ jobs:
       - run:
           name: Start service with new taks version
           command: >
-            ./ecs-cli compose 
-            --cluster calvin --project-name ai --file docker/docker-compose-prod.yml 
-            --ecs-params ./aws/ecs-params.yml 
-            service up
+            ./ecs-cli compose --cluster calvin --project-name ai --file docker/docker-compose-prod.yml --ecs-params ./aws/ecs-params.yml service up
 
 workflows:
   api:
@@ -34,6 +28,7 @@ workflows:
       - aws-ecr/build-and-push-image:
           repo: ai
           tag: latest
+          dockerfile: ./gateway/Dockerfile
       - deploy:
           requires:
             - aws-ecr/build-and-push-image
