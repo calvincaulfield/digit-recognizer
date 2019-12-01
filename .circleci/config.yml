@@ -28,7 +28,6 @@ workflows:
       - aws-ecr/build-and-push-image:
           repo: ai
           tag: latest
-          dockerfile: ./docker/Dockerfile
       - deploy:
           requires:
             - aws-ecr/build-and-push-image
