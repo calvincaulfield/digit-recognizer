@@ -7,7 +7,7 @@ services:
       - 80:2010
     environment:
       - AI_PORT=2010
-      - AWS_ID=AKIAWW7X4IEHTD2PZO63
+      - AI_AWS_ID=AKIAWW7X4IEHTD2PZO63
 
 
 

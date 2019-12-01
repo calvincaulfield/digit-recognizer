@@ -4,8 +4,8 @@ $client = new Aws\Polly\PollyClient([
 	'region'  => 'us-east-1',
 	'version' => 'latest',
 	'credentials' => [
-		'key'    => getenv('AWS_ID'),
-		'secret' => getenv('AWS_PASSWD'),
+		'key'    => getenv('AI_AWS_ID'),
+		'secret' => getenv('AI_AWS_PASSWD'),
 	],
 ]);
 $result = $client->synthesizeSpeech([

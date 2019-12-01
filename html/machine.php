@@ -6,8 +6,8 @@ $client = new Aws\MachineLearning\MachineLearningClient([
 	'region'  => 'us-east-1',
 	'version' => 'latest',
 	'credentials' => [
-		'key'    => getenv('AWS_ID'),
-		'secret' => getenv('AWS_PASSWD'),
+		'key'    => getenv('AI_AWS_ID'),
+		'secret' => getenv('AI_AWS_PASSWD'),
 	],
 ]);
 
