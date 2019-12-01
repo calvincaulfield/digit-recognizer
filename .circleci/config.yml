@@ -25,6 +25,7 @@ jobs:
           command: >
             ./ecs-cli compose 
             --cluster calvin --project-name ai --file docker/docker-compose-prod.yml 
+            --ecs-params ./aws/ecs-params.yml 
             service up
 
 workflows:
