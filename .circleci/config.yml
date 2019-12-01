@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Delete service
           command:
-            ./aws/ecs-cli compose --cluster calvin --project-name ai --file docker-compose-prod.yml --ecs-params ./aws/ecs-params.yml service down
+            ./aws/ecs-cli compose --cluster ai --project-name ai --file docker-compose-prod.yml --ecs-params ./aws/ecs-params.yml service down
       - run:
           name: Wait for service down
           command: |
@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Start service with new taks version
           command: |
-            ./aws/ecs-cli compose --cluster calvin --project-name ai --file docker-compose-prod.yml --ecs-params ./aws/ecs-params.yml service up
+            ./aws/ecs-cli compose --cluster ai --project-name ai --file docker-compose-prod.yml --ecs-params ./aws/ecs-params.yml service up
 
 workflows:
   api:
