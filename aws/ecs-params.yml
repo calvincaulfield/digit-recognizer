@@ -1,0 +1,8 @@
+version: 1
+task_definition:
+  task_execution_role: "arn:aws:iam::461691961615:role/ecsTaskExecutionRole"
+  services:
+    apache:
+      secrets:
+        - value_from: "arn:aws:secretsmanager:ap-northeast-1:461691961615:secret:AI_AWS_PASSWD-83B35G"
+          name: AI_AWS_PASSWD

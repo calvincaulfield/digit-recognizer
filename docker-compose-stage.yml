@@ -7,6 +7,6 @@ services:
     ports:
       - 2010:2010
     env_file:
-      - ./.env-stage
+      - env/.env-stage
     restart: always
 
