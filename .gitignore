@@ -53,6 +53,6 @@ _build
 
 
 ######### web ##########
-.env*
+/env
 
 data

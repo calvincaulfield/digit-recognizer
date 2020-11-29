@@ -4,8 +4,8 @@ $client = new Aws\Polly\PollyClient([
 	'region'  => 'us-east-1',
 	'version' => 'latest',
 	'credentials' => [
-		'key'    => getenv('AI_AWS_ID'),
-		'secret' => getenv('AI_AWS_PASSWD'),
+		'key'    => getenv('AWS_ACCESS_KEY_ID'),
+		'secret' => getenv('AWS_SECRET_ACCESS_KEY'),
 	],
 ]);
 $result = $client->synthesizeSpeech([
@@ -19,7 +19,7 @@ $current_time = time();
 $filename = $current_time . ".mp3";
 //$filename = "polly.mp3";
 
-//file_put_contents('audio/temp.mp3', ''); 
+//file_put_contents('audio/temp.mp3', '');
 file_put_contents('audio/' . $filename, $audio);
 //echo json_encode($filename);
 echo json_encode($filename);
