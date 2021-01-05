@@ -261,6 +261,9 @@
     function resetDisplay() {
       $('#amazon-result').text('?');
 
+      $('#amazon-time').text('?');
+      $('#lib-calvin-time').text('?');
+
       $('#lib-calvin-01').text('?');
       $('#lib-calvin-02').text('?');
       $('#lib-calvin-03').text('?');
@@ -307,8 +310,7 @@
       var my_time = my_result[1];
       var is_same_answer = amazon_number == my_numbers[0][0];
       var text = "アマゾンのAIは" + amazon_time + "秒をかけて" + amazon_number + "だと判断しました。" +
-        "南くんのAIは" + my_time + "秒をかけて" + (is_same_answer ? "同じく" : "") + my_numbers[0][0] + "だと判断しました。" +
-        "キャンバスの外をクリックしてもう一度試してみましょう。";
+        "南くんのAIは" + my_time + "秒をかけて" + (is_same_answer ? "同じく" : "") + my_numbers[0][0] + "だと判断しました。";
       pollySubmit(text);
     }
   </script>
@@ -316,11 +318,13 @@
 
 <body>
 
-  <h1>人工知能体験サイトにようこそ！</h1>
-  <p>音声で案内するのでスピーカーやイヤフォンを用意してください</p>
+  <h1>calvincaulfieldがC++で実装した深層学習</h1>
+  <p>四角の中に０から９までの数字（一桁）を書いて、その下のボタンをおしてみましょう</p>
+  <p>もういっかい試すためには、四角の外をクリックしてください</p>
+  <!-- <p>音声で案内するのでスピーカーやイヤフォンを用意してください</p>
   <div>
     <button style="margin:0 auto" onclick="introduce();">1.説明を聞く</button>
-  </div>
+  </div> -->
 
   <div style="overflow: auto;" id="out-of-canvas">
     <div id="input-canvas-container">
@@ -330,7 +334,7 @@
   </div>
 
   <div>
-    <button style="margin:0 auto" onclick="getBitmap();">2.AIに数字を判別してもらう</button>
+    <button style="margin:0 auto" onclick="getBitmap();">AIに数字を判別してもらう</button>
   </div>
 
   <div style="margin-top:50px">
