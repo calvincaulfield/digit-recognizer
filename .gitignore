@@ -51,8 +51,4 @@ _deps
 
 _build
 
-
-######### web ##########
-/env
-
 data
