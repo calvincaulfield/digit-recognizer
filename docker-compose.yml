@@ -5,9 +5,8 @@ services:
     build: .
     container_name: ai
     image: calvincaulfield/ai
-    ports:
-      - ${AI_PORT}:${AI_PORT}
     restart: always
+    network_mode: "host"
     environment:
       - AI_PORT
       - AWS_ACCESS_KEY_ID
